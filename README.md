@@ -16,7 +16,3 @@ Political Science Research and Methods
 
 - DO_pour-tear-gas-on-fire_PSRM.do: contains code in STATA to reproduce all figures and tables, except Figures 1, A1 and A2.
 - R_Maps_Replication.R: contains code in R to reproduce Figures 1, A1 and A2.
-
-## Other files
-
-- renv, renv.lock: DO NOT MODIFY. They specify the package versions that were used to produce the figures in R

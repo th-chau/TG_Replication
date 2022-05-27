@@ -1,13 +1,14 @@
-# To ensure the correct package versions are installed, we use the `renv' package. If your
-# R environment does not have `renv', please run install.packages("renv")
-# and library("renv")
+# To ensure the correct package versions are installed, we use the `renv' package. 
+# If you run into any dependency issues, please download the replication repository from
+# the following link: https://github.com/th-chau/TG_Replication/
+# The repository contains files from the renv package. If you are running this script
+# with the renv files, please uncomment the following line.
+# renv::restore()
 
 # Please set this to where you have downloaded our files
 setwd()
 
-# Please run this command and activate the project
-renv::restore()
-
+# Please install these two packages if you have not
 library("sf")
 library(ggplot2)
 maps_data <- readRDS("DATA_maps.RDS")
