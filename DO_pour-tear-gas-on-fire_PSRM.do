@@ -118,7 +118,8 @@ eststo clear
 eststo m1: reghdfe percent_dem  tg_binary incumbent_est , a(dlegco)  cluster(district19)  
 eststo m2: reghdfe percent_dem  tg_binary $cov, a(dlegco)  cluster(district19)  
 eststo m3: ivreghdfe percent_dem  (tg_binary  =yoshinoya ) incumbent_est , a(dlegco)  cluster(district19)  
-eststo m4: ivreghdfe percent_dem  (tg_binary  =yoshinoya )  $cov, a(dlegco)  cluster(district19)  
+eststo m4: ivreghdfe percent_dem  (tg_binary  =yoshinoya )  $cov, a(dlegco)  cluster(district19) 
+spmatrix create contiguity W1 
 eststo m5: spivregress percent_dem  (tg_binary  =yoshinoya ) incumbent_est  i.dlegco, dvarlag(W1) force  
 eststo m6: spivregress percent_dem  (tg_binary  =yoshinoya ) $cov i.dlegco, dvarlag(W1) force
 
@@ -345,6 +346,7 @@ eststo m4: ivreghdfe  percent_dem (ztg_log1  =yoshinoya) incumbent_est znew_reg_
 
 
 //---------------TABLE A.17: PLACEBO 15 OLS---------------//
+spmatrix create contiguity W1
 eststo clear 
 eststo m1: reghdfe percent_dem_15  tg_binary if percent_dem_15>0, a(dlegco)  cluster(district19) 
 eststo m2: reghdfe percent_dem_15  tg_binary incumbent_est if percent_dem_15>0, a(dlegco)  cluster(district19) 
@@ -495,8 +497,7 @@ plot1opt(lcolor("blue%50")) plot2opt(lcolor("orange%50") lpattern(longdash) ) //
 
 
 
+
+
 //---------------------------------------------------------------THE END-----------------------------------------------------------------------//
-//-----Summary Stat.----//
-estpost summarize percent_dem tg_binary  tg_log1 tg_logp1  tg_rank4  log_tgclosest tgaway_0km tgaway_1km tgaway_2km  tgaway_3km tgaway_4km yoshinoya incumbent_est  turnout new_reg_percent Degree Mediage MedianIncome Private density eventbinary log_eventfreq  
-*esttab using sum.rtf, nomtitle nonumber nogap cells("count(fmt(0)) mean(fmt(3)) sd(fmt(3)) min(fmt(3)) max(fmt(3))") replace label
 
