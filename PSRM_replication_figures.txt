@@ -1,730 +1,738 @@
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      name:  <unnamed>
-       log:  C:\Users\yama8\Desktop\TG_Replication-master\PSRM_replication_figures.txt
-  log type:  text
- opened on:   1 Jun 2022, 18:40:23
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\yama8\Desktop\PSRM_2022-724\PSRM_stata_2022-724\PSRM_replication_figures.txt
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}24 Jul 2022, 23:29:46
+{txt}
+{com}. 
+{txt}end of do-file
 
-. use DATA_pour-tear-gas-on-fire_PSRM.dta
-
-. 
-end of do-file
-
-. do "C:\Users\yama8\AppData\Local\Temp\STD21d8_000000.tmp"
-
+{com}. do "C:\Users\yama8\AppData\Local\Temp\STD5f94_000000.tmp"
+{txt}
+{com}. use DATA_pour-tear-gas-on-fire_PSRM.dta
+{txt}
+{com}. 
 . **IMPORTANT: The shapefile must be in the same/current directory
 . **This command sets the name of the shapefile
 . spset, modify shpfile(DATA_pour-tear-gas-on-fire_PSRM_Stata_Shapefile.dta)
-  (creating _ID spatial-unit id)
-  (creating _CX coordinate)
+{res}{txt}  (creating _ID spatial-unit id)
+{res}{txt}  (creating _CX coordinate)
   (creating _CY coordinate)
-  Sp dataset DATA_pour-tear-gas-on-fire_PSRM.dta
+{res}{txt}{p 2 5 2}
+Sp dataset {bf:DATA_pour-tear-gas-on-fire_PSRM.dta}
+{p_end}
                 data:  cross sectional
      spatial-unit id:  _ID
          coordinates:  _CX, _CY (planar)
-    linked shapefile:  DATA_pour-tear-gas-on-fire_PSRM_Stata_Shapefile.dta
+    linked shapefile:  {bf:DATA_pour-tear-gas-on-fire_PSRM_Stata_Shapefile.dta}
 
 
-. // Gen 2sls data
+{com}. // Gen 2sls data
 . // First order neighbour (all with spectral normalisation)
 . spmatrix create contiguity W1
-  weighting matrix in W1 contains 2 islands
+{res}{p 2 2 2}{txt} weighting matrix in {inp}W1 {txt}contains 2 islands
+{p_end}
 
-. // second order neighbour
+{com}. // second order neighbour
 . spmatrix create contiguity W2, second
-  weighting matrix in W2 contains 4 islands
+{res}{p 2 2 2}{txt} weighting matrix in {inp}W2 {txt}contains 4 islands
+{p_end}
 
-. // weighed first and second order neighbour
+{com}. // weighed first and second order neighbour
 . . spmatrix create contiguity W3, first second(0.5)
-  weighting matrix in W3 contains 2 islands
+{res}{p 2 2 2}{txt} weighting matrix in {inp}W3 {txt}contains 2 islands
+{p_end}
 
-. // inverse distance
+{com}. // inverse distance
 . spmatrix create idistance W4
-
-. 
+{res}{txt}
+{com}. 
 . 
 . //---------------VARIABLES CONSTRUCTION---------------//
 . g tg_binary=0
+{txt}
+{com}. replace tg_binary=1 if tgfreq>0
+{txt}(143 real changes made)
 
-. replace tg_binary=1 if tgfreq>0
-(143 real changes made)
+{com}. recode tgfreq 1/5=1 6/10=2 11/15=3 16/184=4, gen(tg_rank4)
+{txt}(107 differences between tgfreq and tg_rank4)
 
-. recode tgfreq 1/5=1 6/10=2 11/15=3 16/184=4, gen(tg_rank4)
-(107 differences between tgfreq and tg_rank4)
-
-. 
+{com}. 
 . g tg=tgfreq
-
-. g tg_logp1=log(tg+.1)
-
-. g tg_log1=log(tg+1)
-
-. 
+{txt}
+{com}. g tg_logp1=log(tg+.1)
+{txt}
+{com}. g tg_log1=log(tg+1)
+{txt}
+{com}. 
 . encode district19, gen(district19_num)
+{txt}
+{com}. list district19 district19_num name_c, nol
+{txt}
+     {c TLC}{hline 10}{c -}{hline 10}{c -}{hline 22}{c TRC}
+     {c |} {res}distr~19   distri~m                 name_c {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+  1. {c |} {res}       B          2               司徒拔道 {txt}{c |}
+  2. {c |} {res}       B          2                 跑馬地 {txt}{c |}
+  3. {c |} {res}       B          2                   樂活 {txt}{c |}
+  4. {c |} {res}       B          2                 渣甸山 {txt}{c |}
+  5. {c |} {res}       B          2                   大坑 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+  6. {c |} {res}       B          2                 銅鑼灣 {txt}{c |}
+  7. {c |} {res}       B          2                   天后 {txt}{c |}
+  8. {c |} {res}       B          2                 軒尼詩 {txt}{c |}
+  9. {c |} {res}       B          2                   修頓 {txt}{c |}
+ 10. {c |} {res}       B          2                   愛群 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 11. {c |} {res}       B          2                 大佛口 {txt}{c |}
+ 12. {c |} {res}       B          2                   鵝頸 {txt}{c |}
+ 13. {c |} {res}       B          2                   維園 {txt}{c |}
+ 14. {c |} {res}       K         10                   海濱 {txt}{c |}
+ 15. {c |} {res}       K         10                   馬灣 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 16. {c |} {res}       K         10                 楊屋道 {txt}{c |}
+ 17. {c |} {res}       K         10                   德華 {txt}{c |}
+ 18. {c |} {res}       K         10                 荃灣南 {txt}{c |}
+ 19. {c |} {res}       K         10                   福來 {txt}{c |}
+ 20. {c |} {res}       K         10                 荃灣西 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 21. {c |} {res}       K         10                   愉景 {txt}{c |}
+ 22. {c |} {res}       K         10               荃灣中心 {txt}{c |}
+ 23. {c |} {res}       K         10               梨木樹西 {txt}{c |}
+ 24. {c |} {res}       K         10               荃灣郊區 {txt}{c |}
+ 25. {c |} {res}       K         10               梨木樹東 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 26. {c |} {res}       K         10                   象石 {txt}{c |}
+ 27. {c |} {res}       K         10                   汀深 {txt}{c |}
+ 28. {c |} {res}       K         10                   麗濤 {txt}{c |}
+ 29. {c |} {res}       K         10                   荃威 {txt}{c |}
+ 30. {c |} {res}       K         10                 石圍角 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 31. {c |} {res}       K         10                   綠楊 {txt}{c |}
+ 32. {c |} {res}       K         10                   德尊 {txt}{c |}
+ 33. {c |} {res}       A          1                   山頂 {txt}{c |}
+ 34. {c |} {res}       A          1                   觀龍 {txt}{c |}
+ 35. {c |} {res}       A          1                 半山東 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 36. {c |} {res}       A          1                   衛城 {txt}{c |}
+ 37. {c |} {res}       A          1                   大學 {txt}{c |}
+ 38. {c |} {res}       A          1                   水街 {txt}{c |}
+ 39. {c |} {res}       A          1                   東華 {txt}{c |}
+ 40. {c |} {res}       A          1                   正街 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 41. {c |} {res}       A          1                   中環 {txt}{c |}
+ 42. {c |} {res}       A          1                   上環 {txt}{c |}
+ 43. {c |} {res}       A          1                 西營盤 {txt}{c |}
+ 44. {c |} {res}       A          1                 石塘咀 {txt}{c |}
+ 45. {c |} {res}       A          1                   寶翠 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 46. {c |} {res}       A          1                   西環 {txt}{c |}
+ 47. {c |} {res}       A          1                   堅摩 {txt}{c |}
+ 48. {c |} {res}       H          8                 彩雲南 {txt}{c |}
+ 49. {c |} {res}       H          8                   東頭 {txt}{c |}
+ 50. {c |} {res}       H          8                   彩虹 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 51. {c |} {res}       H          8                   東美 {txt}{c |}
+ 52. {c |} {res}       H          8                 新蒲崗 {txt}{c |}
+ 53. {c |} {res}       H          8                 彩雲西 {txt}{c |}
+ 54. {c |} {res}       H          8                   樂富 {txt}{c |}
+ 55. {c |} {res}       H          8                   龍下 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 56. {c |} {res}       H          8                 彩雲東 {txt}{c |}
+ 57. {c |} {res}       H          8                   池彩 {txt}{c |}
+ 58. {c |} {res}       H          8                   龍趣 {txt}{c |}
+ 59. {c |} {res}       H          8                 橫頭磡 {txt}{c |}
+ 60. {c |} {res}       H          8                   龍上 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 61. {c |} {res}       H          8                   天強 {txt}{c |}
+ 62. {c |} {res}       H          8                 竹園南 {txt}{c |}
+ 63. {c |} {res}       H          8                   鳳德 {txt}{c |}
+ 64. {c |} {res}       H          8                   龍星 {txt}{c |}
+ 65. {c |} {res}       H          8                   鳳凰 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 66. {c |} {res}       H          8                 慈雲東 {txt}{c |}
+ 67. {c |} {res}       H          8                   瓊富 {txt}{c |}
+ 68. {c |} {res}       H          8                 竹園北 {txt}{c |}
+ 69. {c |} {res}       H          8                 慈雲西 {txt}{c |}
+ 70. {c |} {res}       H          8             翠竹及鵬程 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 71. {c |} {res}       H          8                   正愛 {txt}{c |}
+ 72. {c |} {res}       H          8                   正安 {txt}{c |}
+ 73. {c |} {res}       L         11                   兆禧 {txt}{c |}
+ 74. {c |} {res}       L         11                   湖景 {txt}{c |}
+ 75. {c |} {res}       L         11                   蝴蝶 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 76. {c |} {res}       L         11                   悅湖 {txt}{c |}
+ 77. {c |} {res}       L         11                   富新 {txt}{c |}
+ 78. {c |} {res}       L         11                   兆翠 {txt}{c |}
+ 79. {c |} {res}       L         11                 友愛南 {txt}{c |}
+ 80. {c |} {res}       L         11                   安定 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 81. {c |} {res}       L         11                   兆置 {txt}{c |}
+ 82. {c |} {res}       L         11                 友愛北 {txt}{c |}
+ 83. {c |} {res}       L         11                   龍門 {txt}{c |}
+ 84. {c |} {res}       L         11             屯門市中心 {txt}{c |}
+ 85. {c |} {res}       L         11                   山景 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 86. {c |} {res}       L         11                   翠興 {txt}{c |}
+ 87. {c |} {res}       L         11                   景興 {txt}{c |}
+ 88. {c |} {res}       L         11                   興澤 {txt}{c |}
+ 89. {c |} {res}       L         11                   田景 {txt}{c |}
+ 90. {c |} {res}       L         11                   三聖 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 91. {c |} {res}       L         11                   良景 {txt}{c |}
+ 92. {c |} {res}       L         11                   建生 {txt}{c |}
+ 93. {c |} {res}       L         11                   新景 {txt}{c |}
+ 94. {c |} {res}       L         11                   景峰 {txt}{c |}
+ 95. {c |} {res}       L         11                   兆康 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+ 96. {c |} {res}       L         11                   新墟 {txt}{c |}
+ 97. {c |} {res}       L         11                   富泰 {txt}{c |}
+ 98. {c |} {res}       L         11                   樂翠 {txt}{c |}
+ 99. {c |} {res}       L         11               屯門鄉郊 {txt}{c |}
+100. {c |} {res}       L         11                   寶田 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+101. {c |} {res}       L         11                 掃管笏 {txt}{c |}
+102. {c |} {res}       L         11                   恆福 {txt}{c |}
+103. {c |} {res}       L         11                   欣田 {txt}{c |}
+104. {c |} {res}       T         18                   長洲 {txt}{c |}
+105. {c |} {res}       T         18             南丫及蒲台 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+106. {c |} {res}       T         18                   滿逸 {txt}{c |}
+107. {c |} {res}       T         18               逸東邨北 {txt}{c |}
+108. {c |} {res}       T         18           坪洲及喜靈洲 {txt}{c |}
+109. {c |} {res}       T         18                 東涌中 {txt}{c |}
+110. {c |} {res}       T         18                 愉景灣 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+111. {c |} {res}       T         18                 大嶼山 {txt}{c |}
+112. {c |} {res}       T         18                 東涌北 {txt}{c |}
+113. {c |} {res}       T         18                 東涌南 {txt}{c |}
+114. {c |} {res}       E          5               尖沙咀中 {txt}{c |}
+115. {c |} {res}       E          5                 佐敦北 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+116. {c |} {res}       E          5                 佐敦西 {txt}{c |}
+117. {c |} {res}       E          5               油麻地南 {txt}{c |}
+118. {c |} {res}       E          5                   富榮 {txt}{c |}
+119. {c |} {res}       E          5           尖東及京士柏 {txt}{c |}
+120. {c |} {res}       E          5               尖沙咀西 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+121. {c |} {res}       E          5               油麻地北 {txt}{c |}
+122. {c |} {res}       E          5                   富柏 {txt}{c |}
+123. {c |} {res}       E          5                 旺角西 {txt}{c |}
+124. {c |} {res}       E          5                   櫻桃 {txt}{c |}
+125. {c |} {res}       E          5                 旺角南 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+126. {c |} {res}       E          5               大角咀南 {txt}{c |}
+127. {c |} {res}       E          5                   奧運 {txt}{c |}
+128. {c |} {res}       E          5               大角咀北 {txt}{c |}
+129. {c |} {res}       E          5                 旺角北 {txt}{c |}
+130. {c |} {res}       E          5                   大南 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+131. {c |} {res}       E          5                 旺角東 {txt}{c |}
+132. {c |} {res}       E          5                 佐敦南 {txt}{c |}
+133. {c |} {res}       E          5                 九龍站 {txt}{c |}
+134. {c |} {res}       S         17                   長青 {txt}{c |}
+135. {c |} {res}       S         17                   長康 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+136. {c |} {res}       S         17                   盛康 {txt}{c |}
+137. {c |} {res}       S         17                   祖堯 {txt}{c |}
+138. {c |} {res}       S         17                   荔景 {txt}{c |}
+139. {c |} {res}       S         17                 青衣邨 {txt}{c |}
+140. {c |} {res}       S         17                   翠怡 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+141. {c |} {res}       S         17                   荔華 {txt}{c |}
+142. {c |} {res}       S         17                 青衣南 {txt}{c |}
+143. {c |} {res}       S         17                   偉盈 {txt}{c |}
+144. {c |} {res}       S         17                   華麗 {txt}{c |}
+145. {c |} {res}       S         17                   長安 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+146. {c |} {res}       S         17                   興芳 {txt}{c |}
+147. {c |} {res}       S         17                   安灝 {txt}{c |}
+148. {c |} {res}       S         17                   青發 {txt}{c |}
+149. {c |} {res}       S         17                   長亨 {txt}{c |}
+150. {c |} {res}       S         17               葵盛東邨 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+151. {c |} {res}       S         17               葵盛西邨 {txt}{c |}
+152. {c |} {res}       S         17                   葵芳 {txt}{c |}
+153. {c |} {res}       S         17               上大窩口 {txt}{c |}
+154. {c |} {res}       S         17               葵涌邨南 {txt}{c |}
+155. {c |} {res}       S         17                   葵興 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+156. {c |} {res}       S         17                 石籬北 {txt}{c |}
+157. {c |} {res}       S         17                 石籬南 {txt}{c |}
+158. {c |} {res}       S         17               下大窩口 {txt}{c |}
+159. {c |} {res}       S         17               葵涌邨北 {txt}{c |}
+160. {c |} {res}       S         17               大白田西 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+161. {c |} {res}       S         17                   石蔭 {txt}{c |}
+162. {c |} {res}       S         17                   安蔭 {txt}{c |}
+163. {c |} {res}       S         17                   葵聯 {txt}{c |}
+164. {c |} {res}       S         17               大白田東 {txt}{c |}
+165. {c |} {res}       C          3                   環翠 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+166. {c |} {res}       C          3                   佳曉 {txt}{c |}
+167. {c |} {res}       C          3                 小西灣 {txt}{c |}
+168. {c |} {res}       C          3                   翠德 {txt}{c |}
+169. {c |} {res}       C          3                   漁灣 {txt}{c |}
+170. {c |} {res}       C          3                   翡翠 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+171. {c |} {res}       C          3                   景怡 {txt}{c |}
+172. {c |} {res}       C          3                   興民 {txt}{c |}
+173. {c |} {res}       C          3                   樂康 {txt}{c |}
+174. {c |} {res}       C          3                   欣藍 {txt}{c |}
+175. {c |} {res}       C          3                 上耀東 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+176. {c |} {res}       C          3                 下耀東 {txt}{c |}
+177. {c |} {res}       C          3                   翠灣 {txt}{c |}
+178. {c |} {res}       C          3                 筲箕灣 {txt}{c |}
+179. {c |} {res}       C          3               愛秩序灣 {txt}{c |}
+180. {c |} {res}       C          3                 杏花邨 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+181. {c |} {res}       C          3                   興東 {txt}{c |}
+182. {c |} {res}       C          3                   康怡 {txt}{c |}
+183. {c |} {res}       C          3                 西灣河 {txt}{c |}
+184. {c |} {res}       C          3                   南豐 {txt}{c |}
+185. {c |} {res}       C          3                   康山 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+186. {c |} {res}       C          3                 柏架山 {txt}{c |}
+187. {c |} {res}       C          3                 寶馬山 {txt}{c |}
+188. {c |} {res}       C          3                 炮台山 {txt}{c |}
+189. {c |} {res}       C          3                 阿公岩 {txt}{c |}
+190. {c |} {res}       C          3                   錦屏 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+191. {c |} {res}       C          3                   堡壘 {txt}{c |}
+192. {c |} {res}       C          3                   丹拿 {txt}{c |}
+193. {c |} {res}       C          3                 鯉景灣 {txt}{c |}
+194. {c |} {res}       C          3               太古城東 {txt}{c |}
+195. {c |} {res}       C          3               太古城西 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+196. {c |} {res}       C          3               城市花園 {txt}{c |}
+197. {c |} {res}       C          3                   和富 {txt}{c |}
+198. {c |} {res}       C          3                 健康村 {txt}{c |}
+199. {c |} {res}       C          3                 鰂魚涌 {txt}{c |}
+200. {c |} {res}       J          9                   俊翔 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+201. {c |} {res}       J          9                   油麗 {txt}{c |}
+202. {c |} {res}       J          9                   栢雅 {txt}{c |}
+203. {c |} {res}       J          9                 油塘西 {txt}{c |}
+204. {c |} {res}       J          9                   平田 {txt}{c |}
+205. {c |} {res}       J          9                 麗港城 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+206. {c |} {res}       J          9                   景田 {txt}{c |}
+207. {c |} {res}       J          9                   藍田 {txt}{c |}
+208. {c |} {res}       J          9                   興田 {txt}{c |}
+209. {c |} {res}       J          9                   廣德 {txt}{c |}
+210. {c |} {res}       J          9                   月華 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+211. {c |} {res}       J          9               秀茂坪南 {txt}{c |}
+212. {c |} {res}       J          9                   翠屏 {txt}{c |}
+213. {c |} {res}       J          9                   寶樂 {txt}{c |}
+214. {c |} {res}       J          9                   定安 {txt}{c |}
+215. {c |} {res}       J          9               觀塘中心 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+216. {c |} {res}       J          9                   康樂 {txt}{c |}
+217. {c |} {res}       J          9                   協康 {txt}{c |}
+218. {c |} {res}       J          9             牛頭角上邨 {txt}{c |}
+219. {c |} {res}       J          9                   曉麗 {txt}{c |}
+220. {c |} {res}       J          9                 樂華南 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+221. {c |} {res}       J          9                 樂華北 {txt}{c |}
+222. {c |} {res}       J          9               秀茂坪北 {txt}{c |}
+223. {c |} {res}       J          9             牛頭角下邨 {txt}{c |}
+224. {c |} {res}       J          9                   淘大 {txt}{c |}
+225. {c |} {res}       J          9                 九龍灣 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+226. {c |} {res}       J          9                 佐敦谷 {txt}{c |}
+227. {c |} {res}       J          9                   順天 {txt}{c |}
+228. {c |} {res}       J          9                   安利 {txt}{c |}
+229. {c |} {res}       J          9                   啓業 {txt}{c |}
+230. {c |} {res}       J          9                   彩德 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+231. {c |} {res}       J          9                   寶達 {txt}{c |}
+232. {c |} {res}       J          9                   坪石 {txt}{c |}
+233. {c |} {res}       J          9                   雙順 {txt}{c |}
+234. {c |} {res}       J          9                   麗晶 {txt}{c |}
+235. {c |} {res}       J          9                   安泰 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+236. {c |} {res}       J          9               秀茂坪中 {txt}{c |}
+237. {c |} {res}       J          9                   安達 {txt}{c |}
+238. {c |} {res}       J          9                   油翠 {txt}{c |}
+239. {c |} {res}       J          9                 油塘東 {txt}{c |}
+240. {c |} {res}       R         16                   顯嘉 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+241. {c |} {res}       R         16                   徑口 {txt}{c |}
+242. {c |} {res}       R         16                   翠田 {txt}{c |}
+243. {c |} {res}       R         16                   田心 {txt}{c |}
+244. {c |} {res}       R         16                 新田圍 {txt}{c |}
+245. {c |} {res}       R         16                   雲城 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+246. {c |} {res}       R         16                   翠嘉 {txt}{c |}
+247. {c |} {res}       R         16                   秦豐 {txt}{c |}
+248. {c |} {res}       R         16                   博康 {txt}{c |}
+249. {c |} {res}       R         16                 下城門 {txt}{c |}
+250. {c |} {res}       R         16                   大圍 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+251. {c |} {res}       R         16                   沙角 {txt}{c |}
+252. {c |} {res}       R         16                 水泉澳 {txt}{c |}
+253. {c |} {res}       R         16                   廣源 {txt}{c |}
+254. {c |} {res}       R         16             沙田市中心 {txt}{c |}
+255. {c |} {res}       R         16                   愉城 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+256. {c |} {res}       R         16                   王屋 {txt}{c |}
+257. {c |} {res}       R         16                 第一城 {txt}{c |}
+258. {c |} {res}       R         16                 禾輋邨 {txt}{c |}
+259. {c |} {res}       R         16                   瀝源 {txt}{c |}
+260. {c |} {res}       R         16                   松田 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+261. {c |} {res}       R         16                   碧湖 {txt}{c |}
+262. {c |} {res}       R         16                   廣康 {txt}{c |}
+263. {c |} {res}       R         16                   愉欣 {txt}{c |}
+264. {c |} {res}       R         16                   鞍泰 {txt}{c |}
+265. {c |} {res}       R         16                   恒安 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+266. {c |} {res}       R         16                   火炭 {txt}{c |}
+267. {c |} {res}       R         16                   耀安 {txt}{c |}
+268. {c |} {res}       R         16                   頌安 {txt}{c |}
+269. {c |} {res}       R         16                 大水坑 {txt}{c |}
+270. {c |} {res}       R         16                   錦英 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+271. {c |} {res}       R         16                   富龍 {txt}{c |}
+272. {c |} {res}       R         16                   利安 {txt}{c |}
+273. {c |} {res}       R         16                   錦濤 {txt}{c |}
+274. {c |} {res}       R         16           馬鞍山市中心 {txt}{c |}
+275. {c |} {res}       R         16                 烏溪沙 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+276. {c |} {res}       R         16                   駿馬 {txt}{c |}
+277. {c |} {res}       R         16                   乙泉 {txt}{c |}
+278. {c |} {res}       R         16                   穗禾 {txt}{c |}
+279. {c |} {res}       R         16                   海嵐 {txt}{c |}
+280. {c |} {res}       R         16                   帝怡 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+281. {c |} {res}       D          4                 利東二 {txt}{c |}
+282. {c |} {res}       D          4                 利東一 {txt}{c |}
+283. {c |} {res}       D          4                 海怡東 {txt}{c |}
+284. {c |} {res}       D          4                 海怡西 {txt}{c |}
+285. {c |} {res}       D          4               鴨脷洲邨 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+286. {c |} {res}       D          4               鴨脷洲北 {txt}{c |}
+287. {c |} {res}       D          4                 香港仔 {txt}{c |}
+288. {c |} {res}       D          4                   石漁 {txt}{c |}
+289. {c |} {res}       D          4                   華貴 {txt}{c |}
+290. {c |} {res}       D          4                 華富南 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+291. {c |} {res}       D          4                   田灣 {txt}{c |}
+292. {c |} {res}       D          4                 華富北 {txt}{c |}
+293. {c |} {res}       D          4                 黃竹坑 {txt}{c |}
+294. {c |} {res}       D          4                   海灣 {txt}{c |}
+295. {c |} {res}       D          4             赤柱及石澳 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+296. {c |} {res}       D          4                   置富 {txt}{c |}
+297. {c |} {res}       D          4                 薄扶林 {txt}{c |}
+298. {c |} {res}       F          6                 南昌南 {txt}{c |}
+299. {c |} {res}       F          6                 南昌西 {txt}{c |}
+300. {c |} {res}       F          6                 南昌中 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+301. {c |} {res}       F          6                 南昌東 {txt}{c |}
+302. {c |} {res}       F          6                 南昌北 {txt}{c |}
+303. {c |} {res}       F          6                   麗閣 {txt}{c |}
+304. {c |} {res}       F          6                 石硤尾 {txt}{c |}
+305. {c |} {res}       F          6               荔枝角南 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+306. {c |} {res}       F          6               荔枝角中 {txt}{c |}
+307. {c |} {res}       F          6                 美孚南 {txt}{c |}
+308. {c |} {res}       F          6   南山、大坑東及大坑西 {txt}{c |}
+309. {c |} {res}       F          6                 長沙灣 {txt}{c |}
+310. {c |} {res}       F          6                 下白田 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+311. {c |} {res}       F          6                 美孚中 {txt}{c |}
+312. {c |} {res}       F          6                   幸福 {txt}{c |}
+313. {c |} {res}       F          6                   寶麗 {txt}{c |}
+314. {c |} {res}       F          6               荔枝角北 {txt}{c |}
+315. {c |} {res}       F          6                 美孚北 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+316. {c |} {res}       F          6                 李鄭屋 {txt}{c |}
+317. {c |} {res}       F          6                   蘇屋 {txt}{c |}
+318. {c |} {res}       F          6                 又一村 {txt}{c |}
+319. {c |} {res}       F          6           龍坪及上白田 {txt}{c |}
+320. {c |} {res}       F          6                   碧匯 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+321. {c |} {res}       F          6                   富昌 {txt}{c |}
+322. {c |} {res}       F          6                   元州 {txt}{c |}
+323. {c |} {res}       G          7                 黃埔西 {txt}{c |}
+324. {c |} {res}       G          7                 紅磡灣 {txt}{c |}
+325. {c |} {res}       G          7                   紅磡 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+326. {c |} {res}       G          7                 黃埔東 {txt}{c |}
+327. {c |} {res}       G          7                   家維 {txt}{c |}
+328. {c |} {res}       G          7               土瓜灣南 {txt}{c |}
+329. {c |} {res}       G          7                   愛俊 {txt}{c |}
+330. {c |} {res}       G          7               鶴園海逸 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+331. {c |} {res}       G          7               土瓜灣北 {txt}{c |}
+332. {c |} {res}       G          7                   愛民 {txt}{c |}
+333. {c |} {res}       G          7                   海心 {txt}{c |}
+334. {c |} {res}       G          7                   常樂 {txt}{c |}
+335. {c |} {res}       G          7                 馬頭角 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+336. {c |} {res}       G          7                   樂民 {txt}{c |}
+337. {c |} {res}       G          7                 馬坑涌 {txt}{c |}
+338. {c |} {res}       G          7                 何文田 {txt}{c |}
+339. {c |} {res}       G          7                 宋皇臺 {txt}{c |}
+340. {c |} {res}       G          7                 嘉道理 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+341. {c |} {res}       G          7                 馬頭圍 {txt}{c |}
+342. {c |} {res}       G          7                   太子 {txt}{c |}
+343. {c |} {res}       G          7                   龍城 {txt}{c |}
+344. {c |} {res}       G          7             啓德中及南 {txt}{c |}
+345. {c |} {res}       G          7                 九龍塘 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+346. {c |} {res}       G          7                 啓德東 {txt}{c |}
+347. {c |} {res}       G          7                 啓德北 {txt}{c |}
+348. {c |} {res}       P         14                 運頭塘 {txt}{c |}
+349. {c |} {res}       P         14                 大埔滘 {txt}{c |}
+350. {c |} {res}       P         14                   宏福 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+351. {c |} {res}       P         14                   新富 {txt}{c |}
+352. {c |} {res}       P         14                 大埔墟 {txt}{c |}
+353. {c |} {res}       P         14             廣福及寶湖 {txt}{c |}
+354. {c |} {res}       P         14                   太和 {txt}{c |}
+355. {c |} {res}       P         14                 富明新 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+356. {c |} {res}       P         14                 大埔中 {txt}{c |}
+357. {c |} {res}       P         14             舊墟及太湖 {txt}{c |}
+358. {c |} {res}       P         14                   怡富 {txt}{c |}
+359. {c |} {res}       P         14                   大元 {txt}{c |}
+360. {c |} {res}       P         14                   頌汀 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+361. {c |} {res}       P         14                   富亨 {txt}{c |}
+362. {c |} {res}       P         14                 林村谷 {txt}{c |}
+363. {c |} {res}       P         14                 康樂園 {txt}{c |}
+364. {c |} {res}       P         14                 西貢北 {txt}{c |}
+365. {c |} {res}       P         14                   船灣 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+366. {c |} {res}       N         13                   華明 {txt}{c |}
+367. {c |} {res}       N         13                   欣盛 {txt}{c |}
+368. {c |} {res}       N         13                   華都 {txt}{c |}
+369. {c |} {res}       N         13                   祥華 {txt}{c |}
+370. {c |} {res}       N         13                   盛褔 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+371. {c |} {res}       N         13                   清河 {txt}{c |}
+372. {c |} {res}       N         13                 粉嶺南 {txt}{c |}
+373. {c |} {res}       N         13                   御太 {txt}{c |}
+374. {c |} {res}       N         13                 聯和墟 {txt}{c |}
+375. {c |} {res}       N         13                   彩園 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+376. {c |} {res}       N         13                 粉嶺市 {txt}{c |}
+377. {c |} {res}       N         13                 天平東 {txt}{c |}
+378. {c |} {res}       N         13                 天平西 {txt}{c |}
+379. {c |} {res}       N         13                 石湖墟 {txt}{c |}
+380. {c |} {res}       N         13                   鳳翠 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+381. {c |} {res}       N         13                 皇后山 {txt}{c |}
+382. {c |} {res}       N         13               上水鄉郊 {txt}{c |}
+383. {c |} {res}       N         13                   沙打 {txt}{c |}
+384. {c |} {res}       M         12               十八鄉西 {txt}{c |}
+385. {c |} {res}       M         12                 八鄉南 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+386. {c |} {res}       M         12               十八鄉中 {txt}{c |}
+387. {c |} {res}       M         12                 屏山南 {txt}{c |}
+388. {c |} {res}       M         12                   鳳翔 {txt}{c |}
+389. {c |} {res}       M         12                   豐年 {txt}{c |}
+390. {c |} {res}       M         12                   元龍 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+391. {c |} {res}       M         12                   水邊 {txt}{c |}
+392. {c |} {res}       M         12               元朗中心 {txt}{c |}
+393. {c |} {res}       M         12                   南屏 {txt}{c |}
+394. {c |} {res}       M         12                   天盛 {txt}{c |}
+395. {c |} {res}       M         12                   天耀 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+396. {c |} {res}       M         12               元朗東頭 {txt}{c |}
+397. {c |} {res}       M         12                   耀祐 {txt}{c |}
+398. {c |} {res}       M         12                   慈祐 {txt}{c |}
+399. {c |} {res}       M         12                   瑞愛 {txt}{c |}
+400. {c |} {res}       M         12               十八鄉東 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+401. {c |} {res}       M         12                 嘉湖南 {txt}{c |}
+402. {c |} {res}       M         12                   瑞華 {txt}{c |}
+403. {c |} {res}       M         12                   頌華 {txt}{c |}
+404. {c |} {res}       M         12                   頌栢 {txt}{c |}
+405. {c |} {res}       M         12                 嘉湖北 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+406. {c |} {res}       M         12                 屏山中 {txt}{c |}
+407. {c |} {res}       M         12                   錦田 {txt}{c |}
+408. {c |} {res}       M         12                   悅恩 {txt}{c |}
+409. {c |} {res}       M         12                   富恩 {txt}{c |}
+410. {c |} {res}       M         12                   晴景 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+411. {c |} {res}       M         12                   逸澤 {txt}{c |}
+412. {c |} {res}       M         12                 八鄉北 {txt}{c |}
+413. {c |} {res}       M         12                   宏逸 {txt}{c |}
+414. {c |} {res}       M         12                   天恒 {txt}{c |}
+415. {c |} {res}       M         12                   廈村 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+416. {c |} {res}       M         12               錦綉花園 {txt}{c |}
+417. {c |} {res}       M         12                 屏山北 {txt}{c |}
+418. {c |} {res}       M         12                   新田 {txt}{c |}
+419. {c |} {res}       M         12                   北朗 {txt}{c |}
+420. {c |} {res}       M         12               十八鄉北 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+421. {c |} {res}       M         12                   洪福 {txt}{c |}
+422. {c |} {res}       M         12                   盛欣 {txt}{c |}
+423. {c |} {res}       Q         15                   維景 {txt}{c |}
+424. {c |} {res}       Q         15                   都善 {txt}{c |}
+425. {c |} {res}       Q         15                   健明 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+426. {c |} {res}       Q         15                   海晉 {txt}{c |}
+427. {c |} {res}       Q         15                 環保南 {txt}{c |}
+428. {c |} {res}       Q         15                   彩健 {txt}{c |}
+429. {c |} {res}       Q         15                   澳唐 {txt}{c |}
+430. {c |} {res}       Q         15                   富君 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+431. {c |} {res}       Q         15                 環保北 {txt}{c |}
+432. {c |} {res}       Q         15                   尚德 {txt}{c |}
+433. {c |} {res}       Q         15                   軍寶 {txt}{c |}
+434. {c |} {res}       Q         15                   廣明 {txt}{c |}
+435. {c |} {res}       Q         15                   德明 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+436. {c |} {res}       Q         15                   南安 {txt}{c |}
+437. {c |} {res}       Q         15                   厚德 {txt}{c |}
+438. {c |} {res}       Q         15                   富藍 {txt}{c |}
+439. {c |} {res}       Q         15                   景林 {txt}{c |}
+440. {c |} {res}       Q         15                   運亨 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+441. {c |} {res}       Q         15                   翠林 {txt}{c |}
+442. {c |} {res}       Q         15                   康景 {txt}{c |}
+443. {c |} {res}       Q         15                   欣英 {txt}{c |}
+444. {c |} {res}       Q         15                   寶林 {txt}{c |}
+445. {c |} {res}       Q         15                 坑口西 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+446. {c |} {res}       Q         15                 坑口東 {txt}{c |}
+447. {c |} {res}       Q         15             西貢市中心 {txt}{c |}
+448. {c |} {res}       Q         15                 白沙灣 {txt}{c |}
+449. {c |} {res}       Q         15               西貢離島 {txt}{c |}
+450. {c |} {res}       Q         15                   寶怡 {txt}{c |}
+     {c LT}{hline 10}{c -}{hline 10}{c -}{hline 22}{c RT}
+451. {c |} {res}       Q         15                   慧茵 {txt}{c |}
+452. {c |} {res}       P         14                   寶雅 {txt}{c |}
+     {c BLC}{hline 10}{c -}{hline 10}{c -}{hline 22}{c BRC}
 
-. list district19 district19_num name_c, nol
+{com}. recode district19_num 1 2 3 4=1 5 6 7=2 8 9=3 10 11 12 17 18=4 13 14 15 16=5, gen(dlegco)
+{txt}(437 differences between district19_num and dlegco)
 
-     +--------------------------------------------+
-     | distr~19   distri~m                 name_c |
-     |--------------------------------------------|
-  1. |        B          2               司徒拔道 |
-  2. |        B          2                 跑馬地 |
-  3. |        B          2                   樂活 |
-  4. |        B          2                 渣甸山 |
-  5. |        B          2                   大坑 |
-     |--------------------------------------------|
-  6. |        B          2                 銅鑼灣 |
-  7. |        B          2                   天后 |
-  8. |        B          2                 軒尼詩 |
-  9. |        B          2                   修頓 |
- 10. |        B          2                   愛群 |
-     |--------------------------------------------|
- 11. |        B          2                 大佛口 |
- 12. |        B          2                   鵝頸 |
- 13. |        B          2                   維園 |
- 14. |        K         10                   海濱 |
- 15. |        K         10                   馬灣 |
-     |--------------------------------------------|
- 16. |        K         10                 楊屋道 |
- 17. |        K         10                   德華 |
- 18. |        K         10                 荃灣南 |
- 19. |        K         10                   福來 |
- 20. |        K         10                 荃灣西 |
-     |--------------------------------------------|
- 21. |        K         10                   愉景 |
- 22. |        K         10               荃灣中心 |
- 23. |        K         10               梨木樹西 |
- 24. |        K         10               荃灣郊區 |
- 25. |        K         10               梨木樹東 |
-     |--------------------------------------------|
- 26. |        K         10                   象石 |
- 27. |        K         10                   汀深 |
- 28. |        K         10                   麗濤 |
- 29. |        K         10                   荃威 |
- 30. |        K         10                 石圍角 |
-     |--------------------------------------------|
- 31. |        K         10                   綠楊 |
- 32. |        K         10                   德尊 |
- 33. |        A          1                   山頂 |
- 34. |        A          1                   觀龍 |
- 35. |        A          1                 半山東 |
-     |--------------------------------------------|
- 36. |        A          1                   衛城 |
- 37. |        A          1                   大學 |
- 38. |        A          1                   水街 |
- 39. |        A          1                   東華 |
- 40. |        A          1                   正街 |
-     |--------------------------------------------|
- 41. |        A          1                   中環 |
- 42. |        A          1                   上環 |
- 43. |        A          1                 西營盤 |
- 44. |        A          1                 石塘咀 |
- 45. |        A          1                   寶翠 |
-     |--------------------------------------------|
- 46. |        A          1                   西環 |
- 47. |        A          1                   堅摩 |
- 48. |        H          8                 彩雲南 |
- 49. |        H          8                   東頭 |
- 50. |        H          8                   彩虹 |
-     |--------------------------------------------|
- 51. |        H          8                   東美 |
- 52. |        H          8                 新蒲崗 |
- 53. |        H          8                 彩雲西 |
- 54. |        H          8                   樂富 |
- 55. |        H          8                   龍下 |
-     |--------------------------------------------|
- 56. |        H          8                 彩雲東 |
- 57. |        H          8                   池彩 |
- 58. |        H          8                   龍趣 |
- 59. |        H          8                 橫頭磡 |
- 60. |        H          8                   龍上 |
-     |--------------------------------------------|
- 61. |        H          8                   天強 |
- 62. |        H          8                 竹園南 |
- 63. |        H          8                   鳳德 |
- 64. |        H          8                   龍星 |
- 65. |        H          8                   鳳凰 |
-     |--------------------------------------------|
- 66. |        H          8                 慈雲東 |
- 67. |        H          8                   瓊富 |
- 68. |        H          8                 竹園北 |
- 69. |        H          8                 慈雲西 |
- 70. |        H          8             翠竹及鵬程 |
-     |--------------------------------------------|
- 71. |        H          8                   正愛 |
- 72. |        H          8                   正安 |
- 73. |        L         11                   兆禧 |
- 74. |        L         11                   湖景 |
- 75. |        L         11                   蝴蝶 |
-     |--------------------------------------------|
- 76. |        L         11                   悅湖 |
- 77. |        L         11                   富新 |
- 78. |        L         11                   兆翠 |
- 79. |        L         11                 友愛南 |
- 80. |        L         11                   安定 |
-     |--------------------------------------------|
- 81. |        L         11                   兆置 |
- 82. |        L         11                 友愛北 |
- 83. |        L         11                   龍門 |
- 84. |        L         11             屯門市中心 |
- 85. |        L         11                   山景 |
-     |--------------------------------------------|
- 86. |        L         11                   翠興 |
- 87. |        L         11                   景興 |
- 88. |        L         11                   興澤 |
- 89. |        L         11                   田景 |
- 90. |        L         11                   三聖 |
-     |--------------------------------------------|
- 91. |        L         11                   良景 |
- 92. |        L         11                   建生 |
- 93. |        L         11                   新景 |
- 94. |        L         11                   景峰 |
- 95. |        L         11                   兆康 |
-     |--------------------------------------------|
- 96. |        L         11                   新墟 |
- 97. |        L         11                   富泰 |
- 98. |        L         11                   樂翠 |
- 99. |        L         11               屯門鄉郊 |
-100. |        L         11                   寶田 |
-     |--------------------------------------------|
-101. |        L         11                 掃管笏 |
-102. |        L         11                   恆福 |
-103. |        L         11                   欣田 |
-104. |        T         18                   長洲 |
-105. |        T         18             南丫及蒲台 |
-     |--------------------------------------------|
-106. |        T         18                   滿逸 |
-107. |        T         18               逸東邨北 |
-108. |        T         18           坪洲及喜靈洲 |
-109. |        T         18                 東涌中 |
-110. |        T         18                 愉景灣 |
-     |--------------------------------------------|
-111. |        T         18                 大嶼山 |
-112. |        T         18                 東涌北 |
-113. |        T         18                 東涌南 |
-114. |        E          5               尖沙咀中 |
-115. |        E          5                 佐敦北 |
-     |--------------------------------------------|
-116. |        E          5                 佐敦西 |
-117. |        E          5               油麻地南 |
-118. |        E          5                   富榮 |
-119. |        E          5           尖東及京士柏 |
-120. |        E          5               尖沙咀西 |
-     |--------------------------------------------|
-121. |        E          5               油麻地北 |
-122. |        E          5                   富柏 |
-123. |        E          5                 旺角西 |
-124. |        E          5                   櫻桃 |
-125. |        E          5                 旺角南 |
-     |--------------------------------------------|
-126. |        E          5               大角咀南 |
-127. |        E          5                   奧運 |
-128. |        E          5               大角咀北 |
-129. |        E          5                 旺角北 |
-130. |        E          5                   大南 |
-     |--------------------------------------------|
-131. |        E          5                 旺角東 |
-132. |        E          5                 佐敦南 |
-133. |        E          5                 九龍站 |
-134. |        S         17                   長青 |
-135. |        S         17                   長康 |
-     |--------------------------------------------|
-136. |        S         17                   盛康 |
-137. |        S         17                   祖堯 |
-138. |        S         17                   荔景 |
-139. |        S         17                 青衣邨 |
-140. |        S         17                   翠怡 |
-     |--------------------------------------------|
-141. |        S         17                   荔華 |
-142. |        S         17                 青衣南 |
-143. |        S         17                   偉盈 |
-144. |        S         17                   華麗 |
-145. |        S         17                   長安 |
-     |--------------------------------------------|
-146. |        S         17                   興芳 |
-147. |        S         17                   安灝 |
-148. |        S         17                   青發 |
-149. |        S         17                   長亨 |
-150. |        S         17               葵盛東邨 |
-     |--------------------------------------------|
-151. |        S         17               葵盛西邨 |
-152. |        S         17                   葵芳 |
-153. |        S         17               上大窩口 |
-154. |        S         17               葵涌邨南 |
-155. |        S         17                   葵興 |
-     |--------------------------------------------|
-156. |        S         17                 石籬北 |
-157. |        S         17                 石籬南 |
-158. |        S         17               下大窩口 |
-159. |        S         17               葵涌邨北 |
-160. |        S         17               大白田西 |
-     |--------------------------------------------|
-161. |        S         17                   石蔭 |
-162. |        S         17                   安蔭 |
-163. |        S         17                   葵聯 |
-164. |        S         17               大白田東 |
-165. |        C          3                   環翠 |
-     |--------------------------------------------|
-166. |        C          3                   佳曉 |
-167. |        C          3                 小西灣 |
-168. |        C          3                   翠德 |
-169. |        C          3                   漁灣 |
-170. |        C          3                   翡翠 |
-     |--------------------------------------------|
-171. |        C          3                   景怡 |
-172. |        C          3                   興民 |
-173. |        C          3                   樂康 |
-174. |        C          3                   欣藍 |
-175. |        C          3                 上耀東 |
-     |--------------------------------------------|
-176. |        C          3                 下耀東 |
-177. |        C          3                   翠灣 |
-178. |        C          3                 筲箕灣 |
-179. |        C          3               愛秩序灣 |
-180. |        C          3                 杏花邨 |
-     |--------------------------------------------|
-181. |        C          3                   興東 |
-182. |        C          3                   康怡 |
-183. |        C          3                 西灣河 |
-184. |        C          3                   南豐 |
-185. |        C          3                   康山 |
-     |--------------------------------------------|
-186. |        C          3                 柏架山 |
-187. |        C          3                 寶馬山 |
-188. |        C          3                 炮台山 |
-189. |        C          3                 阿公岩 |
-190. |        C          3                   錦屏 |
-     |--------------------------------------------|
-191. |        C          3                   堡壘 |
-192. |        C          3                   丹拿 |
-193. |        C          3                 鯉景灣 |
-194. |        C          3               太古城東 |
-195. |        C          3               太古城西 |
-     |--------------------------------------------|
-196. |        C          3               城市花園 |
-197. |        C          3                   和富 |
-198. |        C          3                 健康村 |
-199. |        C          3                 鰂魚涌 |
-200. |        J          9                   俊翔 |
-     |--------------------------------------------|
-201. |        J          9                   油麗 |
-202. |        J          9                   栢雅 |
-203. |        J          9                 油塘西 |
-204. |        J          9                   平田 |
-205. |        J          9                 麗港城 |
-     |--------------------------------------------|
-206. |        J          9                   景田 |
-207. |        J          9                   藍田 |
-208. |        J          9                   興田 |
-209. |        J          9                   廣德 |
-210. |        J          9                   月華 |
-     |--------------------------------------------|
-211. |        J          9               秀茂坪南 |
-212. |        J          9                   翠屏 |
-213. |        J          9                   寶樂 |
-214. |        J          9                   定安 |
-215. |        J          9               觀塘中心 |
-     |--------------------------------------------|
-216. |        J          9                   康樂 |
-217. |        J          9                   協康 |
-218. |        J          9             牛頭角上邨 |
-219. |        J          9                   曉麗 |
-220. |        J          9                 樂華南 |
-     |--------------------------------------------|
-221. |        J          9                 樂華北 |
-222. |        J          9               秀茂坪北 |
-223. |        J          9             牛頭角下邨 |
-224. |        J          9                   淘大 |
-225. |        J          9                 九龍灣 |
-     |--------------------------------------------|
-226. |        J          9                 佐敦谷 |
-227. |        J          9                   順天 |
-228. |        J          9                   安利 |
-229. |        J          9                   啓業 |
-230. |        J          9                   彩德 |
-     |--------------------------------------------|
-231. |        J          9                   寶達 |
-232. |        J          9                   坪石 |
-233. |        J          9                   雙順 |
-234. |        J          9                   麗晶 |
-235. |        J          9                   安泰 |
-     |--------------------------------------------|
-236. |        J          9               秀茂坪中 |
-237. |        J          9                   安達 |
-238. |        J          9                   油翠 |
-239. |        J          9                 油塘東 |
-240. |        R         16                   顯嘉 |
-     |--------------------------------------------|
-241. |        R         16                   徑口 |
-242. |        R         16                   翠田 |
-243. |        R         16                   田心 |
-244. |        R         16                 新田圍 |
-245. |        R         16                   雲城 |
-     |--------------------------------------------|
-246. |        R         16                   翠嘉 |
-247. |        R         16                   秦豐 |
-248. |        R         16                   博康 |
-249. |        R         16                 下城門 |
-250. |        R         16                   大圍 |
-     |--------------------------------------------|
-251. |        R         16                   沙角 |
-252. |        R         16                 水泉澳 |
-253. |        R         16                   廣源 |
-254. |        R         16             沙田市中心 |
-255. |        R         16                   愉城 |
-     |--------------------------------------------|
-256. |        R         16                   王屋 |
-257. |        R         16                 第一城 |
-258. |        R         16                 禾輋邨 |
-259. |        R         16                   瀝源 |
-260. |        R         16                   松田 |
-     |--------------------------------------------|
-261. |        R         16                   碧湖 |
-262. |        R         16                   廣康 |
-263. |        R         16                   愉欣 |
-264. |        R         16                   鞍泰 |
-265. |        R         16                   恒安 |
-     |--------------------------------------------|
-266. |        R         16                   火炭 |
-267. |        R         16                   耀安 |
-268. |        R         16                   頌安 |
-269. |        R         16                 大水坑 |
-270. |        R         16                   錦英 |
-     |--------------------------------------------|
-271. |        R         16                   富龍 |
-272. |        R         16                   利安 |
-273. |        R         16                   錦濤 |
-274. |        R         16           馬鞍山市中心 |
-275. |        R         16                 烏溪沙 |
-     |--------------------------------------------|
-276. |        R         16                   駿馬 |
-277. |        R         16                   乙泉 |
-278. |        R         16                   穗禾 |
-279. |        R         16                   海嵐 |
-280. |        R         16                   帝怡 |
-     |--------------------------------------------|
-281. |        D          4                 利東二 |
-282. |        D          4                 利東一 |
-283. |        D          4                 海怡東 |
-284. |        D          4                 海怡西 |
-285. |        D          4               鴨脷洲邨 |
-     |--------------------------------------------|
-286. |        D          4               鴨脷洲北 |
-287. |        D          4                 香港仔 |
-288. |        D          4                   石漁 |
-289. |        D          4                   華貴 |
-290. |        D          4                 華富南 |
-     |--------------------------------------------|
-291. |        D          4                   田灣 |
-292. |        D          4                 華富北 |
-293. |        D          4                 黃竹坑 |
-294. |        D          4                   海灣 |
-295. |        D          4             赤柱及石澳 |
-     |--------------------------------------------|
-296. |        D          4                   置富 |
-297. |        D          4                 薄扶林 |
-298. |        F          6                 南昌南 |
-299. |        F          6                 南昌西 |
-300. |        F          6                 南昌中 |
-     |--------------------------------------------|
-301. |        F          6                 南昌東 |
-302. |        F          6                 南昌北 |
-303. |        F          6                   麗閣 |
-304. |        F          6                 石硤尾 |
-305. |        F          6               荔枝角南 |
-     |--------------------------------------------|
-306. |        F          6               荔枝角中 |
-307. |        F          6                 美孚南 |
-308. |        F          6   南山、大坑東及大坑西 |
-309. |        F          6                 長沙灣 |
-310. |        F          6                 下白田 |
-     |--------------------------------------------|
-311. |        F          6                 美孚中 |
-312. |        F          6                   幸福 |
-313. |        F          6                   寶麗 |
-314. |        F          6               荔枝角北 |
-315. |        F          6                 美孚北 |
-     |--------------------------------------------|
-316. |        F          6                 李鄭屋 |
-317. |        F          6                   蘇屋 |
-318. |        F          6                 又一村 |
-319. |        F          6           龍坪及上白田 |
-320. |        F          6                   碧匯 |
-     |--------------------------------------------|
-321. |        F          6                   富昌 |
-322. |        F          6                   元州 |
-323. |        G          7                 黃埔西 |
-324. |        G          7                 紅磡灣 |
-325. |        G          7                   紅磡 |
-     |--------------------------------------------|
-326. |        G          7                 黃埔東 |
-327. |        G          7                   家維 |
-328. |        G          7               土瓜灣南 |
-329. |        G          7                   愛俊 |
-330. |        G          7               鶴園海逸 |
-     |--------------------------------------------|
-331. |        G          7               土瓜灣北 |
-332. |        G          7                   愛民 |
-333. |        G          7                   海心 |
-334. |        G          7                   常樂 |
-335. |        G          7                 馬頭角 |
-     |--------------------------------------------|
-336. |        G          7                   樂民 |
-337. |        G          7                 馬坑涌 |
-338. |        G          7                 何文田 |
-339. |        G          7                 宋皇臺 |
-340. |        G          7                 嘉道理 |
-     |--------------------------------------------|
-341. |        G          7                 馬頭圍 |
-342. |        G          7                   太子 |
-343. |        G          7                   龍城 |
-344. |        G          7             啓德中及南 |
-345. |        G          7                 九龍塘 |
-     |--------------------------------------------|
-346. |        G          7                 啓德東 |
-347. |        G          7                 啓德北 |
-348. |        P         14                 運頭塘 |
-349. |        P         14                 大埔滘 |
-350. |        P         14                   宏福 |
-     |--------------------------------------------|
-351. |        P         14                   新富 |
-352. |        P         14                 大埔墟 |
-353. |        P         14             廣福及寶湖 |
-354. |        P         14                   太和 |
-355. |        P         14                 富明新 |
-     |--------------------------------------------|
-356. |        P         14                 大埔中 |
-357. |        P         14             舊墟及太湖 |
-358. |        P         14                   怡富 |
-359. |        P         14                   大元 |
-360. |        P         14                   頌汀 |
-     |--------------------------------------------|
-361. |        P         14                   富亨 |
-362. |        P         14                 林村谷 |
-363. |        P         14                 康樂園 |
-364. |        P         14                 西貢北 |
-365. |        P         14                   船灣 |
-     |--------------------------------------------|
-366. |        N         13                   華明 |
-367. |        N         13                   欣盛 |
-368. |        N         13                   華都 |
-369. |        N         13                   祥華 |
-370. |        N         13                   盛褔 |
-     |--------------------------------------------|
-371. |        N         13                   清河 |
-372. |        N         13                 粉嶺南 |
-373. |        N         13                   御太 |
-374. |        N         13                 聯和墟 |
-375. |        N         13                   彩園 |
-     |--------------------------------------------|
-376. |        N         13                 粉嶺市 |
-377. |        N         13                 天平東 |
-378. |        N         13                 天平西 |
-379. |        N         13                 石湖墟 |
-380. |        N         13                   鳳翠 |
-     |--------------------------------------------|
-381. |        N         13                 皇后山 |
-382. |        N         13               上水鄉郊 |
-383. |        N         13                   沙打 |
-384. |        M         12               十八鄉西 |
-385. |        M         12                 八鄉南 |
-     |--------------------------------------------|
-386. |        M         12               十八鄉中 |
-387. |        M         12                 屏山南 |
-388. |        M         12                   鳳翔 |
-389. |        M         12                   豐年 |
-390. |        M         12                   元龍 |
-     |--------------------------------------------|
-391. |        M         12                   水邊 |
-392. |        M         12               元朗中心 |
-393. |        M         12                   南屏 |
-394. |        M         12                   天盛 |
-395. |        M         12                   天耀 |
-     |--------------------------------------------|
-396. |        M         12               元朗東頭 |
-397. |        M         12                   耀祐 |
-398. |        M         12                   慈祐 |
-399. |        M         12                   瑞愛 |
-400. |        M         12               十八鄉東 |
-     |--------------------------------------------|
-401. |        M         12                 嘉湖南 |
-402. |        M         12                   瑞華 |
-403. |        M         12                   頌華 |
-404. |        M         12                   頌栢 |
-405. |        M         12                 嘉湖北 |
-     |--------------------------------------------|
-406. |        M         12                 屏山中 |
-407. |        M         12                   錦田 |
-408. |        M         12                   悅恩 |
-409. |        M         12                   富恩 |
-410. |        M         12                   晴景 |
-     |--------------------------------------------|
-411. |        M         12                   逸澤 |
-412. |        M         12                 八鄉北 |
-413. |        M         12                   宏逸 |
-414. |        M         12                   天恒 |
-415. |        M         12                   廈村 |
-     |--------------------------------------------|
-416. |        M         12               錦綉花園 |
-417. |        M         12                 屏山北 |
-418. |        M         12                   新田 |
-419. |        M         12                   北朗 |
-420. |        M         12               十八鄉北 |
-     |--------------------------------------------|
-421. |        M         12                   洪福 |
-422. |        M         12                   盛欣 |
-423. |        Q         15                   維景 |
-424. |        Q         15                   都善 |
-425. |        Q         15                   健明 |
-     |--------------------------------------------|
-426. |        Q         15                   海晉 |
-427. |        Q         15                 環保南 |
-428. |        Q         15                   彩健 |
-429. |        Q         15                   澳唐 |
-430. |        Q         15                   富君 |
-     |--------------------------------------------|
-431. |        Q         15                 環保北 |
-432. |        Q         15                   尚德 |
-433. |        Q         15                   軍寶 |
-434. |        Q         15                   廣明 |
-435. |        Q         15                   德明 |
-     |--------------------------------------------|
-436. |        Q         15                   南安 |
-437. |        Q         15                   厚德 |
-438. |        Q         15                   富藍 |
-439. |        Q         15                   景林 |
-440. |        Q         15                   運亨 |
-     |--------------------------------------------|
-441. |        Q         15                   翠林 |
-442. |        Q         15                   康景 |
-443. |        Q         15                   欣英 |
-444. |        Q         15                   寶林 |
-445. |        Q         15                 坑口西 |
-     |--------------------------------------------|
-446. |        Q         15                 坑口東 |
-447. |        Q         15             西貢市中心 |
-448. |        Q         15                 白沙灣 |
-449. |        Q         15               西貢離島 |
-450. |        Q         15                   寶怡 |
-     |--------------------------------------------|
-451. |        Q         15                   慧茵 |
-452. |        P         14                   寶雅 |
-     +--------------------------------------------+
-
-. recode district19_num 1 2 3 4=1 5 6 7=2 8 9=3 10 11 12 17 18=4 13 14 15 16=5, gen(dlegco)
-(437 differences between district19_num and dlegco)
-
-. 
+{com}. 
 . g eventfreq=event_freq
-
-. g eventbinary=event_binary
-
-. g log_eventfreq=log(eventfreq+.1)
-
-. g density=population/size
-
-. g logdensity=log(density)
-
-. g log_tgclosest= log(centroid_from_closest_tg)
-
-. g tgaway_1km=centroid_from_closest_tg>1000
-
-. g tgaway_2km=centroid_from_closest_tg>2000
-
-. g tgaway_3km=centroid_from_closest_tg>3000
-
-. g tgaway_4km=centroid_from_closest_tg>4000
-
-. g tgaway_0km=centroid_from_closest_tg<1001
-
-. 
+{txt}
+{com}. g eventbinary=event_binary
+{txt}
+{com}. g log_eventfreq=log(eventfreq+.1)
+{txt}
+{com}. g density=population/size
+{txt}
+{com}. g logdensity=log(density)
+{txt}
+{com}. g log_tgclosest= log(centroid_from_closest_tg)
+{txt}
+{com}. g tgaway_1km=centroid_from_closest_tg>1000
+{txt}
+{com}. g tgaway_2km=centroid_from_closest_tg>2000
+{txt}
+{com}. g tgaway_3km=centroid_from_closest_tg>3000
+{txt}
+{com}. g tgaway_4km=centroid_from_closest_tg>4000
+{txt}
+{com}. g tgaway_0km=centroid_from_closest_tg<1001
+{txt}
+{com}. 
 . 
 . //---------------STANDARDIZED VARIABLES---------------//
 . egen zdegree = std(degree)
-(32 missing values generated)
+{txt}(32 missing values generated)
 
-. egen zmedianage = std(mediage)
-(32 missing values generated)
+{com}. egen zmedianage = std(mediage)
+{txt}(32 missing values generated)
 
-. egen zmedianincome = std(medianincome)
-(32 missing values generated)
+{com}. egen zmedianincome = std(medianincome)
+{txt}(32 missing values generated)
 
-. egen zprivate = std(private)
-(32 missing values generated)
+{com}. egen zprivate = std(private)
+{txt}(32 missing values generated)
 
-. egen ztg_log1 = std(tg_log1)
-
-. egen ztg_logp1= std(tg_logp1)
-
-. egen znew_reg_percent = std(new_reg_percent)
-
-. egen zlog_tgclosest = std(log_tgclosest)
-
-. egen zlogdensity=std(logdensity)
-
-. egen zdensity=std(density)
-
-. egen zlog_eventfreq=std(log_eventfreq)
-
-. 
+{com}. egen ztg_log1 = std(tg_log1)
+{txt}
+{com}. egen ztg_logp1= std(tg_logp1)
+{txt}
+{com}. egen znew_reg_percent = std(new_reg_percent)
+{txt}
+{com}. egen zlog_tgclosest = std(log_tgclosest)
+{txt}
+{com}. egen zlogdensity=std(logdensity)
+{txt}
+{com}. egen zdensity=std(density)
+{txt}
+{com}. egen zlog_eventfreq=std(log_eventfreq)
+{txt}
+{com}. 
 . 
 . //---------------LABELS---------------//
-. lab var tg_binary "Tear gas (\emph{binary})"
-
-. lab var ztg_log1 "Tear gas (\emph{log})"
-
-. lab var tg_rank4 "Tear gas: 4 rank"
-
-. lab var incumbent_est "Pro-Beijing incumbency"
-
-. lab var newdistrict "New district"
-
-. lab var turnout "Turnout"
-
-. lab var znew_reg_percent "Newly registered voters\%"
-
-. lab var zdegree "Degree holders\%"
-
-. lab var zmedianage "Median age"
-
-. lab var zmedianincome "Median income"
-
-. lab var zprivate "Private housing\%"
-
-. lab var tg_rank4 "Tear Gas: 4 Rank"
-
-. lab var ztg_logp1 "Tear Gas \emph{log+.1}"
-
-. lab var zlogdensity "Population density (\emph{log})"
-
-. lab var zdensity "Population density"
-
-. lab var eventbinary "Mobilization events (\emph{binary})"
-
-. lab var zlog_eventfreq "Mobilization events frequency (\emph{log})"
-
-. lab var zlog_tgclosest "Distance to nearest tear gas exposure (\emph{log})"
-
-. lab var tgaway_0km "Tear gas exposure $\leqslant$ 1km"
-
-. lab var tgaway_1km "Tear gas exposure $>$ 1km"
-
-. lab var tgaway_2km "Tear gas exposure $>$ 2km"
-
-. lab var tgaway_3km "Tear gas exposure $>$ 3km"
-
-. lab var tgaway_4km "Tear gas exposure $>$ 4km"
-
-. 
+. lab var tg_binary "Tear gas (\emph{c -(}binary{c )-})"
+{txt}
+{com}. lab var ztg_log1 "Tear gas (\emph{c -(}log{c )-})"
+{txt}
+{com}. lab var tg_rank4 "Tear gas: 4 rank"
+{txt}
+{com}. lab var incumbent_est "Pro-Beijing incumbency"
+{txt}
+{com}. lab var newdistrict "New district"
+{txt}
+{com}. lab var turnout "Turnout"
+{txt}
+{com}. lab var znew_reg_percent "Newly registered voters\%"
+{txt}
+{com}. lab var zdegree "Degree holders\%"
+{txt}
+{com}. lab var zmedianage "Median age"
+{txt}
+{com}. lab var zmedianincome "Median income"
+{txt}
+{com}. lab var zprivate "Private housing\%"
+{txt}
+{com}. lab var tg_rank4 "Tear Gas: 4 Rank"
+{txt}
+{com}. lab var ztg_logp1 "Tear Gas \emph{c -(}log+.1{c )-}"
+{txt}
+{com}. lab var zlogdensity "Population density (\emph{c -(}log{c )-})"
+{txt}
+{com}. lab var zdensity "Population density"
+{txt}
+{com}. lab var eventbinary "Mobilization events (\emph{c -(}binary{c )-})"
+{txt}
+{com}. lab var zlog_eventfreq "Mobilization events frequency (\emph{c -(}log{c )-})"
+{txt}
+{com}. lab var zlog_tgclosest "Distance to nearest tear gas exposure (\emph{c -(}log{c )-})"
+{txt}
+{com}. lab var tgaway_0km "Tear gas exposure $\leqslant$ 1km"
+{txt}
+{com}. lab var tgaway_1km "Tear gas exposure $>$ 1km"
+{txt}
+{com}. lab var tgaway_2km "Tear gas exposure $>$ 2km"
+{txt}
+{com}. lab var tgaway_3km "Tear gas exposure $>$ 3km"
+{txt}
+{com}. lab var tgaway_4km "Tear gas exposure $>$ 4km"
+{txt}
+{com}. 
 . 
 . //---------------ENVIROMENT---------------//
 . global cov incumbent_est  znew_reg_percent zdegree zmedianage zmedianincome zprivate
-
+{txt}
+{com}. 
 . 
-. 
-end of do-file
+{txt}end of do-file
 
-. do "C:\Users\yama8\AppData\Local\Temp\STD21d8_000000.tmp"
-
+{com}. do "C:\Users\yama8\AppData\Local\Temp\STD5f94_000000.tmp"
+{txt}
+{com}.  
 . **************************************************************************
 . **************************************************************************
 . //----------------------------FIGURES-----------------------------------//
@@ -733,252 +741,328 @@ end of do-file
 . 
 . //---------------FIGURE 2: DISTANCE---------------//
 . set scheme plottig
-
-. graph set window fontface "Arial"
-
-. grstyle init
-
-.                 grstyle set legend 2, inside
-
-.         grstyle set plain, horizontal grid
-
-.                 grstyle set noextend
-
-.                 grstyle symbolsize p medium
-
-. 
+{txt}
+{com}. graph set window fontface "Arial"
+{txt}
+{com}. grstyle init
+{res}{txt}
+{com}.                 grstyle set legend 2, inside
+{txt}
+{com}.         grstyle set plain, horizontal grid
+{txt}
+{com}.                 grstyle set noextend
+{txt}
+{com}.                 grstyle symbolsize p medium
+{txt}
+{com}. 
 . quietly ivreghdfe percent_dem  (tgaway_0km  =yoshinoya )  $cov, a(dlegco)  cluster(district19)  
-
-. est store dis0
-
-. quietly ivreghdfe percent_dem  (tgaway_1km  =yoshinoya )  $cov, a(dlegco)  cluster(district19)  
-
-. est store dis1
-
-. quietly ivreghdfe percent_dem  (tgaway_2km  =yoshinoya )  $cov, a(dlegco)  cluster(district19)  
-
-. est store dis2
-
-. quietly ivreghdfe percent_dem  (tgaway_3km  =yoshinoya )  $cov, a(dlegco)  cluster(district19)  
-
-. est store dis3
-
-. quietly ivreghdfe percent_dem  (tgaway_4km  =yoshinoya )  $cov, a(dlegco)  cluster(district19)  
-
-. est store dis4
-
-. 
+{txt}
+{com}. est store dis0
+{txt}
+{com}. quietly ivreghdfe percent_dem  (tgaway_1km  =yoshinoya )  $cov, a(dlegco)  cluster(district19)  
+{txt}
+{com}. est store dis1
+{txt}
+{com}. quietly ivreghdfe percent_dem  (tgaway_2km  =yoshinoya )  $cov, a(dlegco)  cluster(district19)  
+{txt}
+{com}. est store dis2
+{txt}
+{com}. quietly ivreghdfe percent_dem  (tgaway_3km  =yoshinoya )  $cov, a(dlegco)  cluster(district19)  
+{txt}
+{com}. est store dis3
+{txt}
+{com}. quietly ivreghdfe percent_dem  (tgaway_4km  =yoshinoya )  $cov, a(dlegco)  cluster(district19)  
+{txt}
+{com}. est store dis4
+{txt}
+{com}. 
 . coefplot   (dis0, offset(-0.05) msymbol(O) mcolor(black)) dis1  dis2 dis3 dis4 , vertical ciopts(color(black)) color(black) ///
 > keep( tgaway_0km  tgaway_1km tgaway_2km tgaway_3km tgaway_4km) ///
 > coeflabels(tgaway_0km="In 1km" tgaway_1km="1km away" tgaway_2km="2km away" tgaway_3km="3km away" tgaway_4km="4km away",   wrap(18)) ///
-> yline(0, lcolor(black))  ytitle("{bf:Predicted Pro-Democratic Voteshare}", size(small) height(-5))  xtitle("{bf:Distance to Nearest Tear Gas Exposure}") legend (off) ///
-> name(g1, replace)
+> yline(0, lcolor(black))  ytitle("{c -(}bf:Predicted Pro-Democratic Voteshare{c )-}", size(small) height(-5))  xtitle("{c -(}bf:Distance to Nearest Tear Gas Exposure{c )-}") legend (off) plotregion(lcolor(black))
+{res}{txt}
+{com}. 
+. graph save Figure_2, replace 
+{txt}(note: file Figure_2.gph not found)
+{res}{txt}(file Figure_2.gph saved)
 
+{com}. 
 . 
 . 
-end of do-file
-
-. do "C:\Users\yama8\AppData\Local\Temp\STD21d8_000000.tmp"
-
+. 
 . //---------------FIGURE A.3: DISTANCE---------------//
-. gen pipe = "|"
-
-. gen where = 0.44
-
-. twoway qfitci percent_dem log_tgclosest || scatter where log_tgclosest, ms(none) mlabpos(0) mlabel(pipe) color(black) legend(off) ///
-> ytitle("Predicted Pro-Democratic Vote Shares") xtitle("(Log of) Distance to Nearest Tear Gas Expourse")
-
 . 
-end of do-file
+. gen pipe = "|"
+{txt}
+{com}. gen where = 0.44
+{txt}
+{com}. twoway qfitci percent_dem log_tgclosest || scatter where log_tgclosest, ms(none) mlabpos(0) mlabel(pipe) mlabcolor(black) color(black) plotr(lcolor(black)) legend(off) ///
+> ytitle("Predicted Pro-Democratic Vote Shares") xtitle("(Log of) Distance to Nearest Tear Gas Expourse")
+{res}{txt}
+{com}. 
+. graph save Figure_A3, replace 
+{txt}(note: file Figure_A3.gph not found)
+{res}{txt}(file Figure_A3.gph saved)
 
-. do "C:\Users\yama8\AppData\Local\Temp\STD21d8_000000.tmp"
-
+{com}. 
+. 
 . //---------------FIGURE 3: Marginplot---------------//
 . set scheme plottig
-
-. graph set window fontface "Arial"
-
-. 
+{txt}
+{com}. graph set window fontface "Arial"
+{txt}
+{com}. 
 . grstyle init
-
-.         grstyle set plain, horizontal grid
-
-.                 grstyle set noextend
-
-.         
+{res}{txt}
+{com}.         grstyle set plain, horizontal grid
+{txt}
+{com}.                 grstyle set noextend
+{txt}
+{com}.         
 . reghdfe turnout  tg_log1   if incumbent_est==1, a(dlegco)  cluster(district19) 
-(MWFE estimator converged in 1 iterations)
+{res}{txt}({browse "http://scorreia.com/research/hdfe.pdf":MWFE estimator} converged in 1 iterations)
+{res}
+{txt}HDFE Linear regression{col 51}Number of obs{col 67}= {res}       243
+{txt}Absorbing 1 HDFE group{col 51}F({res}   1{txt},{res}     17{txt}){col 67}= {res}      9.19
+{txt}Statistics robust to heteroskedasticity{col 51}Prob > F{col 67}= {res}    0.0075
+{txt}{col 51}R-squared{col 67}= {res}    0.0953
+{txt}{col 51}Adj R-squared{col 67}= {res}    0.0762
+{txt}{col 51}Within R-sq.{col 67}= {res}    0.0531
+{txt}{col 1}Number of clusters ({res}district19{txt}) {col 30}= {res}        18{txt}{col 51}Root MSE{col 67}= {res}    0.0390
 
-HDFE Linear regression                            Number of obs   =        243
-Absorbing 1 HDFE group                            F(   1,     17) =       9.19
-Statistics robust to heteroskedasticity           Prob > F        =     0.0075
-                                                  R-squared       =     0.0953
-                                                  Adj R-squared   =     0.0762
-                                                  Within R-sq.    =     0.0531
-Number of clusters (district19) =         18      Root MSE        =     0.0390
+{txt}{ralign 78:(Std. Err. adjusted for {res:18} clusters in district19)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}     turnout{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}tg_log1 {c |}{col 14}{res}{space 2}-.0083958{col 26}{space 2} .0027699{col 37}{space 1}   -3.03{col 46}{space 3}0.008{col 54}{space 4}-.0142399{col 67}{space 3}-.0025517
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2} .7120387{col 26}{space 2} .0030853{col 37}{space 1}  230.78{col 46}{space 3}0.000{col 54}{space 4} .7055292{col 67}{space 3} .7185481
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Absorbed degrees of freedom:
+{res}{col 1}{text}{hline 13}{c TT}{hline 12}{hline 12}{hline 14}{hline 1}{c TRC}
+{col 1}{text} Absorbed FE{col 14}{c |} Categories{col 27} - Redundant{col 39}  = Num. Coefs{col 54}{c |}
+{res}{col 1}{text}{hline 13}{c +}{hline 12}{hline 12}{hline 14}{hline 1}{c RT}
+{col 1}{text}      dlegco{col 14}{c |}{space 1}        5{col 27}{space 1}        0{col 39}{result}{space 1}        5{col 53}{text} {col 54}{c |}
+{res}{col 1}{text}{hline 13}{c BT}{hline 12}{hline 12}{hline 14}{hline 1}{c BRC}
+{res}{txt}
+{com}. margins , at (tg_log1=(0(0.5)5) ) saving(gr1, replace)
+{res}
+{txt}Adjusted predictions{col 49}Number of obs{col 67}= {res}       243
+{txt}{col 1}Model VCE{col 14}: {res}Robust
 
-                            (Std. Err. adjusted for 18 clusters in district19)
-------------------------------------------------------------------------------
-             |               Robust
-     turnout |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-     tg_log1 |  -.0083958   .0027699    -3.03   0.008    -.0142399   -.0025517
-       _cons |   .7120387   .0030853   230.78   0.000     .7055292    .7185481
-------------------------------------------------------------------------------
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Linear prediction, predict()}{p_end}
+{p2colreset}{...}
 
-Absorbed degrees of freedom:
------------------------------------------------------+
- Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------+---------------------------------------|
-      dlegco |         5           0           5     |
------------------------------------------------------+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:1._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}0}{p_end}
+{p2colreset}{...}
 
-. margins , at (tg_log1=(0(0.5)5) ) saving(gr1, replace)
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:2._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 9}.5}{p_end}
+{p2colreset}{...}
 
-Adjusted predictions                            Number of obs     =        243
-Model VCE    : Robust
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:3._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}1}{p_end}
+{p2colreset}{...}
 
-Expression   : Linear prediction, predict()
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:4._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 8}1.5}{p_end}
+{p2colreset}{...}
 
-1._at        : tg_log1         =           0
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:5._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}2}{p_end}
+{p2colreset}{...}
 
-2._at        : tg_log1         =          .5
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:6._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 8}2.5}{p_end}
+{p2colreset}{...}
 
-3._at        : tg_log1         =           1
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:7._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}3}{p_end}
+{p2colreset}{...}
 
-4._at        : tg_log1         =         1.5
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:8._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 8}3.5}{p_end}
+{p2colreset}{...}
 
-5._at        : tg_log1         =           2
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:9._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}4}{p_end}
+{p2colreset}{...}
 
-6._at        : tg_log1         =         2.5
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:10._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 8}4.5}{p_end}
+{p2colreset}{...}
 
-7._at        : tg_log1         =           3
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:11._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}5}{p_end}
+{p2colreset}{...}
 
-8._at        : tg_log1         =         3.5
+{res}{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26} Delta-method
+{col 14}{c |}     Margin{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}_at {c |}
+{space 10}1  {c |}{col 14}{res}{space 2} .7120387{col 26}{space 2} .0030853{col 37}{space 1}  230.78{col 46}{space 3}0.000{col 54}{space 4} .7059915{col 67}{space 3} .7180858
+{txt}{space 10}2  {c |}{col 14}{res}{space 2} .7078408{col 26}{space 2} .0026212{col 37}{space 1}  270.04{col 46}{space 3}0.000{col 54}{space 4} .7027032{col 67}{space 3} .7129783
+{txt}{space 10}3  {c |}{col 14}{res}{space 2} .7036429{col 26}{space 2} .0028388{col 37}{space 1}  247.87{col 46}{space 3}0.000{col 54}{space 4} .6980789{col 67}{space 3} .7092068
+{txt}{space 10}4  {c |}{col 14}{res}{space 2}  .699445{col 26}{space 2}  .003617{col 37}{space 1}  193.37{col 46}{space 3}0.000{col 54}{space 4} .6923557{col 67}{space 3} .7065343
+{txt}{space 10}5  {c |}{col 14}{res}{space 2} .6952471{col 26}{space 2} .0046844{col 37}{space 1}  148.42{col 46}{space 3}0.000{col 54}{space 4} .6860658{col 67}{space 3} .7044283
+{txt}{space 10}6  {c |}{col 14}{res}{space 2} .6910492{col 26}{space 2} .0058856{col 37}{space 1}  117.41{col 46}{space 3}0.000{col 54}{space 4} .6795136{col 67}{space 3} .7025847
+{txt}{space 10}7  {c |}{col 14}{res}{space 2} .6868513{col 26}{space 2} .0071536{col 37}{space 1}   96.02{col 46}{space 3}0.000{col 54}{space 4} .6728306{col 67}{space 3}  .700872
+{txt}{space 10}8  {c |}{col 14}{res}{space 2} .6826534{col 26}{space 2} .0084583{col 37}{space 1}   80.71{col 46}{space 3}0.000{col 54}{space 4} .6660754{col 67}{space 3} .6992313
+{txt}{space 10}9  {c |}{col 14}{res}{space 2} .6784555{col 26}{space 2} .0097851{col 37}{space 1}   69.34{col 46}{space 3}0.000{col 54}{space 4}  .659277{col 67}{space 3}  .697634
+{txt}{space 9}10  {c |}{col 14}{res}{space 2} .6742576{col 26}{space 2} .0111261{col 37}{space 1}   60.60{col 46}{space 3}0.000{col 54}{space 4} .6524508{col 67}{space 3} .6960644
+{txt}{space 9}11  {c |}{col 14}{res}{space 2} .6700597{col 26}{space 2} .0124767{col 37}{space 1}   53.70{col 46}{space 3}0.000{col 54}{space 4} .6456057{col 67}{space 3} .6945136
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}(note: file gr1.dta not found)
 
-9._at        : tg_log1         =           4
+{com}. reghdfe turnout  tg_log1   if incumbent_est==0, a(dlegco)  cluster(district19) 
+{res}{txt}({browse "http://scorreia.com/research/hdfe.pdf":MWFE estimator} converged in 1 iterations)
+{res}
+{txt}HDFE Linear regression{col 51}Number of obs{col 67}= {res}       209
+{txt}Absorbing 1 HDFE group{col 51}F({res}   1{txt},{res}     17{txt}){col 67}= {res}      0.01
+{txt}Statistics robust to heteroskedasticity{col 51}Prob > F{col 67}= {res}    0.9220
+{txt}{col 51}R-squared{col 67}= {res}    0.1022
+{txt}{col 51}Adj R-squared{col 67}= {res}    0.0801
+{txt}{col 51}Within R-sq.{col 67}= {res}    0.0001
+{txt}{col 1}Number of clusters ({res}district19{txt}) {col 30}= {res}        18{txt}{col 51}Root MSE{col 67}= {res}    0.0390
 
-10._at       : tg_log1         =         4.5
+{txt}{ralign 78:(Std. Err. adjusted for {res:18} clusters in district19)}
+{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26}    Robust
+{col 1}     turnout{col 14}{c |}      Coef.{col 26}   Std. Err.{col 38}      t{col 46}   P>|t|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 5}tg_log1 {c |}{col 14}{res}{space 2}-.0003805{col 26}{space 2}   .00383{col 37}{space 1}   -0.10{col 46}{space 3}0.922{col 54}{space 4}-.0084611{col 67}{space 3} .0077001
+{txt}{space 7}_cons {c |}{col 14}{res}{space 2}  .709599{col 26}{space 2} .0035526{col 37}{space 1}  199.74{col 46}{space 3}0.000{col 54}{space 4} .7021036{col 67}{space 3} .7170944
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}
+{txt}Absorbed degrees of freedom:
+{res}{col 1}{text}{hline 13}{c TT}{hline 12}{hline 12}{hline 14}{hline 1}{c TRC}
+{col 1}{text} Absorbed FE{col 14}{c |} Categories{col 27} - Redundant{col 39}  = Num. Coefs{col 54}{c |}
+{res}{col 1}{text}{hline 13}{c +}{hline 12}{hline 12}{hline 14}{hline 1}{c RT}
+{col 1}{text}      dlegco{col 14}{c |}{space 1}        5{col 27}{space 1}        0{col 39}{result}{space 1}        5{col 53}{text} {col 54}{c |}
+{res}{col 1}{text}{hline 13}{c BT}{hline 12}{hline 12}{hline 14}{hline 1}{c BRC}
+{res}{txt}
+{com}. margins , at (tg_log1=(0(0.5)5) ) saving(gr2, replace)
+{res}
+{txt}Adjusted predictions{col 49}Number of obs{col 67}= {res}       209
+{txt}{col 1}Model VCE{col 14}: {res}Robust
 
-11._at       : tg_log1         =           5
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:Expression}:{space 1}{res:Linear prediction, predict()}{p_end}
+{p2colreset}{...}
 
-------------------------------------------------------------------------------
-             |            Delta-method
-             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         _at |
-          1  |   .7120387   .0030853   230.78   0.000     .7059915    .7180858
-          2  |   .7078408   .0026212   270.04   0.000     .7027032    .7129783
-          3  |   .7036429   .0028388   247.87   0.000     .6980789    .7092068
-          4  |    .699445    .003617   193.37   0.000     .6923557    .7065343
-          5  |   .6952471   .0046844   148.42   0.000     .6860658    .7044283
-          6  |   .6910492   .0058856   117.41   0.000     .6795136    .7025847
-          7  |   .6868513   .0071536    96.02   0.000     .6728306     .700872
-          8  |   .6826534   .0084583    80.71   0.000     .6660754    .6992313
-          9  |   .6784555   .0097851    69.34   0.000      .659277     .697634
-         10  |   .6742576   .0111261    60.60   0.000     .6524508    .6960644
-         11  |   .6700597   .0124767    53.70   0.000     .6456057    .6945136
-------------------------------------------------------------------------------
-(note: file gr1.dta not found)
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:1._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}0}{p_end}
+{p2colreset}{...}
 
-. reghdfe turnout  tg_log1   if incumbent_est==0, a(dlegco)  cluster(district19) 
-(MWFE estimator converged in 1 iterations)
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:2._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 9}.5}{p_end}
+{p2colreset}{...}
 
-HDFE Linear regression                            Number of obs   =        209
-Absorbing 1 HDFE group                            F(   1,     17) =       0.01
-Statistics robust to heteroskedasticity           Prob > F        =     0.9220
-                                                  R-squared       =     0.1022
-                                                  Adj R-squared   =     0.0801
-                                                  Within R-sq.    =     0.0001
-Number of clusters (district19) =         18      Root MSE        =     0.0390
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:3._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}1}{p_end}
+{p2colreset}{...}
 
-                            (Std. Err. adjusted for 18 clusters in district19)
-------------------------------------------------------------------------------
-             |               Robust
-     turnout |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-     tg_log1 |  -.0003805     .00383    -0.10   0.922    -.0084611    .0077001
-       _cons |    .709599   .0035526   199.74   0.000     .7021036    .7170944
-------------------------------------------------------------------------------
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:4._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 8}1.5}{p_end}
+{p2colreset}{...}
 
-Absorbed degrees of freedom:
------------------------------------------------------+
- Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------+---------------------------------------|
-      dlegco |         5           0           5     |
------------------------------------------------------+
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:5._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}2}{p_end}
+{p2colreset}{...}
 
-. margins , at (tg_log1=(0(0.5)5) ) saving(gr2, replace)
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:6._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 8}2.5}{p_end}
+{p2colreset}{...}
 
-Adjusted predictions                            Number of obs     =        209
-Model VCE    : Robust
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:7._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}3}{p_end}
+{p2colreset}{...}
 
-Expression   : Linear prediction, predict()
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:8._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 8}3.5}{p_end}
+{p2colreset}{...}
 
-1._at        : tg_log1         =           0
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:9._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}4}{p_end}
+{p2colreset}{...}
 
-2._at        : tg_log1         =          .5
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:10._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 8}4.5}{p_end}
+{p2colreset}{...}
 
-3._at        : tg_log1         =           1
+{txt}{p2colset 1 14 16 2}{...}
+{p2col:11._at}:{space 1}{res:{txt:tg_log1}{space 9}{txt:=} {space 10}5}{p_end}
+{p2colreset}{...}
 
-4._at        : tg_log1         =         1.5
+{res}{txt}{hline 13}{c TT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{col 14}{c |}{col 26} Delta-method
+{col 14}{c |}     Margin{col 26}   Std. Err.{col 38}      z{col 46}   P>|z|{col 54}     [95% Con{col 67}f. Interval]
+{hline 13}{c +}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{space 9}_at {c |}
+{space 10}1  {c |}{col 14}{res}{space 2}  .709599{col 26}{space 2} .0035526{col 37}{space 1}  199.74{col 46}{space 3}0.000{col 54}{space 4} .7026359{col 67}{space 3}  .716562
+{txt}{space 10}2  {c |}{col 14}{res}{space 2} .7094087{col 26}{space 2} .0031438{col 37}{space 1}  225.65{col 46}{space 3}0.000{col 54}{space 4}  .703247{col 67}{space 3} .7155705
+{txt}{space 10}3  {c |}{col 14}{res}{space 2} .7092185{col 26}{space 2} .0038053{col 37}{space 1}  186.38{col 46}{space 3}0.000{col 54}{space 4} .7017602{col 67}{space 3} .7166768
+{txt}{space 10}4  {c |}{col 14}{res}{space 2} .7090283{col 26}{space 2} .0051392{col 37}{space 1}  137.96{col 46}{space 3}0.000{col 54}{space 4} .6989556{col 67}{space 3}  .719101
+{txt}{space 10}5  {c |}{col 14}{res}{space 2} .7088381{col 26}{space 2} .0067585{col 37}{space 1}  104.88{col 46}{space 3}0.000{col 54}{space 4} .6955916{col 67}{space 3} .7220845
+{txt}{space 10}6  {c |}{col 14}{res}{space 2} .7086478{col 26}{space 2} .0085016{col 37}{space 1}   83.35{col 46}{space 3}0.000{col 54}{space 4} .6919849{col 67}{space 3} .7253107
+{txt}{space 10}7  {c |}{col 14}{res}{space 2} .7084576{col 26}{space 2} .0103059{col 37}{space 1}   68.74{col 46}{space 3}0.000{col 54}{space 4} .6882583{col 67}{space 3} .7286569
+{txt}{space 10}8  {c |}{col 14}{res}{space 2} .7082674{col 26}{space 2} .0121442{col 37}{space 1}   58.32{col 46}{space 3}0.000{col 54}{space 4} .6844652{col 67}{space 3} .7320695
+{txt}{space 10}9  {c |}{col 14}{res}{space 2} .7080771{col 26}{space 2}  .014003{col 37}{space 1}   50.57{col 46}{space 3}0.000{col 54}{space 4} .6806317{col 67}{space 3} .7355226
+{txt}{space 9}10  {c |}{col 14}{res}{space 2} .7078869{col 26}{space 2} .0158752{col 37}{space 1}   44.59{col 46}{space 3}0.000{col 54}{space 4}  .676772{col 67}{space 3} .7390018
+{txt}{space 9}11  {c |}{col 14}{res}{space 2} .7076967{col 26}{space 2} .0177566{col 37}{space 1}   39.86{col 46}{space 3}0.000{col 54}{space 4} .6728945{col 67}{space 3} .7424989
+{txt}{hline 13}{c BT}{hline 11}{hline 11}{hline 9}{hline 8}{hline 13}{hline 12}
+{res}{txt}(note: file gr2.dta not found)
 
-5._at        : tg_log1         =           2
-
-6._at        : tg_log1         =         2.5
-
-7._at        : tg_log1         =           3
-
-8._at        : tg_log1         =         3.5
-
-9._at        : tg_log1         =           4
-
-10._at       : tg_log1         =         4.5
-
-11._at       : tg_log1         =           5
-
-------------------------------------------------------------------------------
-             |            Delta-method
-             |     Margin   Std. Err.      z    P>|z|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-         _at |
-          1  |    .709599   .0035526   199.74   0.000     .7026359     .716562
-          2  |   .7094087   .0031438   225.65   0.000      .703247    .7155705
-          3  |   .7092185   .0038053   186.38   0.000     .7017602    .7166768
-          4  |   .7090283   .0051392   137.96   0.000     .6989556     .719101
-          5  |   .7088381   .0067585   104.88   0.000     .6955916    .7220845
-          6  |   .7086478   .0085016    83.35   0.000     .6919849    .7253107
-          7  |   .7084576   .0103059    68.74   0.000     .6882583    .7286569
-          8  |   .7082674   .0121442    58.32   0.000     .6844652    .7320695
-          9  |   .7080771    .014003    50.57   0.000     .6806317    .7355226
-         10  |   .7078869   .0158752    44.59   0.000      .676772    .7390018
-         11  |   .7076967   .0177566    39.86   0.000     .6728945    .7424989
-------------------------------------------------------------------------------
-(note: file gr2.dta not found)
-
-. 
+{com}. 
 . combomarginsplot gr1 gr2,  recast(line) ciopts(recast(rarea) lpatter(none)) title("")   ///
 > plot1opt(lcolor("blue%50")) plot2opt(lcolor("orange%50") lpattern(longdash) ) ///
 >         plotr(lcolor(black)) ///
 >         ci1opt(color("blue%25")) ci2opt(color("orange%15"))   ///
->         ytitle("{bf:Turnout}") ///
->         addplot(kdensity  tg_log1  if tg_log1<=5,    yaxis(2) ytitle("{bf:Kernel Density}", axis(2)) yscale(alt axis(2) )  below color("black%5") lcolor("black%10") ///
->         legend(order(1 "{bf:Pro-Beijing}" "{bf:incumbency}" 2 "{bf:Non Pro-Beijing}" "{bf:incumbency}" )))   ///
->         xtitle("") b2title("{bf:Tear Gas ({it:log})}", size(small))  xlabel(-2(1)4, grid glcolor(gs15)) 
+>         ytitle("{c -(}bf:Turnout{c )-}") ///
+>         addplot(kdensity  tg_log1  if tg_log1<=5,    yaxis(2) ytitle("{c -(}bf:Kernel Density{c )-}", axis(2)) yscale(alt axis(2) )  below color("black%5") lcolor("black%10") ///
+>         legend(order(1 "{c -(}bf:Pro-Beijing{c )-}" "{c -(}bf:incumbency{c )-}" 2 "{c -(}bf:Non Pro-Beijing{c )-}" "{c -(}bf:incumbency{c )-}" )))   ///
+>         xtitle("") b2title("{c -(}bf:Tear Gas ({c -(}it:log{c )-}){c )-}", size(small))  xlabel(-2(1)4, grid glcolor(gs15)) 
+{res}
+{text}{p 2 6 2}Variables that uniquely identify margins: tg_log1 _filenumber{p_end}
+{p 0 4 2}
+{txt}(note:  named style
+none not found in class
+linepattern,  default attributes used)
+{p_end}
+{p 0 4 2}
+{txt}(note:  named style
+none not found in class
+linepattern,  default attributes used)
+{p_end}
+{p 0 4 2}
+{txt}(note:  named style
+none not found in class
+linepattern,  default attributes used)
+{p_end}
+{p 0 4 2}
+{txt}(note:  named style
+none not found in class
+linepattern,  default attributes used)
+{p_end}
+{res}{txt}
+{com}. 
+. graph save Figure_3, replace 
+{txt}(note: file Figure_3.gph not found)
+{res}{txt}(file Figure_3.gph saved)
 
-  Variables that uniquely identify margins: tg_log1 _filenumber
-(note:  named style none not found in class linepattern, default attributes used)
-(note:  named style none not found in class linepattern, default attributes used)
-(note:  named style none not found in class linepattern, default attributes used)
-(note:  named style none not found in class linepattern, default attributes used)
-
+{com}. 
 . 
-. 
-end of do-file
+{txt}end of do-file
 
-. log close
-      name:  <unnamed>
-       log:  C:\Users\yama8\Desktop\TG_Replication-master\PSRM_replication_figures.txt
-  log type:  text
- closed on:   1 Jun 2022, 18:41:21
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\yama8\Desktop\PSRM_2022-724\PSRM_stata_2022-724\PSRM_replication_figures.txt
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res}24 Jul 2022, 23:30:29
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

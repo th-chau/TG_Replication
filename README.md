@@ -4,8 +4,7 @@ Authors: Tak Huen Chau and Kin-Man Wan
 
 Political Science Research and Methods
 
-25 May 2025
-
+25 July 2022
 ## Data sets
 
 - DATA_pour-tear-gas-on-fire_PSRM.dta: this is the main dataset. Variables construction and data sources can be found in Appendix A of the research note.

@@ -15,7 +15,9 @@ ssc install combomarginsplot
 
 //---------------PSRM REPLICATION DATA---------------//
 *Please cd to the folder that includes all of our data and files
-cd ""
+cd "C:\Users\yama8\Desktop\PSRM_2022-724\PSRM_stata_2022-724"
+
+
 use DATA_pour-tear-gas-on-fire_PSRM.dta
 
 **IMPORTANT: The shapefile must be in the same/current directory
@@ -461,15 +463,21 @@ est store dis4
 coefplot   (dis0, offset(-0.05) msymbol(O) mcolor(black)) dis1  dis2 dis3 dis4 , vertical ciopts(color(black)) color(black) ///
 keep( tgaway_0km  tgaway_1km tgaway_2km tgaway_3km tgaway_4km) ///
 coeflabels(tgaway_0km="In 1km" tgaway_1km="1km away" tgaway_2km="2km away" tgaway_3km="3km away" tgaway_4km="4km away",   wrap(18)) ///
-yline(0, lcolor(black))  ytitle("{bf:Predicted Pro-Democratic Voteshare}", size(small) height(-5))  xtitle("{bf:Distance to Nearest Tear Gas Exposure}") legend (off) ///
-name(g1, replace)
+yline(0, lcolor(black))  ytitle("{bf:Predicted Pro-Democratic Voteshare}", size(small) height(-5))  xtitle("{bf:Distance to Nearest Tear Gas Exposure}") legend (off) plotregion(lcolor(black))
+
+graph save Figure_2, replace 
+
+
 
 
 //---------------FIGURE A.3: DISTANCE---------------//
+
 gen pipe = "|"
 gen where = 0.44
-twoway qfitci percent_dem log_tgclosest || scatter where log_tgclosest, ms(none) mlabpos(0) mlabel(pipe) color(black) legend(off) ///
+twoway qfitci percent_dem log_tgclosest || scatter where log_tgclosest, ms(none) mlabpos(0) mlabel(pipe) mlabcolor(black) color(black) plotr(lcolor(black)) legend(off) ///
 ytitle("Predicted Pro-Democratic Vote Shares") xtitle("(Log of) Distance to Nearest Tear Gas Expourse")
+
+graph save Figure_A3, replace 
 
 
 //---------------FIGURE 3: Marginplot---------------//
@@ -494,8 +502,7 @@ plot1opt(lcolor("blue%50")) plot2opt(lcolor("orange%50") lpattern(longdash) ) //
 	legend(order(1 "{bf:Pro-Beijing}" "{bf:incumbency}" 2 "{bf:Non Pro-Beijing}" "{bf:incumbency}" )))   ///
 	xtitle("") b2title("{bf:Tear Gas ({it:log})}", size(small))  xlabel(-2(1)4, grid glcolor(gs15)) 
 
-
-
+graph save Figure_3, replace 
 
 
 
